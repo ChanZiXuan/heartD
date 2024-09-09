@@ -5,6 +5,8 @@ import joblib
 # Load your trained model
 lr_model = load('logisticregression2.joblib')
 
+def main():
+    st.title('Heart Disease Prediction')
 # Define a sample input similar to what you would get from the Streamlit form
 input_data = pd.DataFrame({
     'Age': [55],           # Numeric
