@@ -4,9 +4,9 @@ from joblib import load
 # Load the trained logistic regression model (including the pipeline)
 try:
     lr_model = load('heartdisease_logisticregression.joblib')
-    st.write('Model loaded successfully.')
+    st.write("Model loaded successfully.")
 except Exception as e:
-    st.write(f'Error loading model: {e}')
+    st.write(f"Error loading model: {e}")
 
 # Define a sample input matching the structure of the training DataFrame
 input_data = pd.DataFrame({
