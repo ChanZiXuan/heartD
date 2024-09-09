@@ -5,8 +5,6 @@ from joblib import load
 try:
     lr_model = load('heartdisease_logisticregression.joblib')
     st.write("Model loaded successfully.")
-except Exception as e:
-    st.write(f"Error loading model: {e}")
 
 # Define a sample input matching the structure of the training DataFrame
 input_data = pd.DataFrame({
