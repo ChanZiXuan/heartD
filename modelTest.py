@@ -27,6 +27,11 @@ print(input_data)
 # Attempt prediction using the trained model
 try:
     prediction = lr_model.predict(input_data)
+    # Show the result
+    if prediction[0] == 1:
+        st.write('The model predicts that this person has heart disease.')
+    else:
+        st.write('The model predicts that this person does not have heart disease.')
     print(f"Prediction: {prediction}")
 except Exception as e:
     print(f"An error occurred during prediction: {e}")
