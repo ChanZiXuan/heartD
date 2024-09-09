@@ -1,13 +1,19 @@
+import streamlit as st
 import pandas as pd
 from joblib import load
 
-# Load the trained logistic regression model (including the pipeline)
-try:
-    lr_model = load('heartdisease_logisticregression.joblib')
-    st.write("Model loaded successfully.")
+# Caching the model loading process
+@st.cache_resource
+def load_model():
+    return load('heartdisease_logisticregression.joblib')
 
-# Define a sample input matching the structure of the training DataFrame
-input_data = pd.DataFrame({
+# Load model
+lr_model = load_model()
+
+def main():
+    st.title("Heart Disease Prediction")
+
+    input_data = pd.DataFrame({
     'Age': [55],           # Numeric: Age in years
     'Sex': [1],            # 1 = Male, 0 = Female (encoded numerically)
     'ChestPainType': [2],  # Encoded values: TA, ATA, NAP, ASY => 0, 1, 2, 3
@@ -21,15 +27,27 @@ input_data = pd.DataFrame({
     'ST_Slope': [0]        # Encoded: Up, Flat, Down => 0, 1, 2
 })
 
-# Ensure the columns and types are correct
-st.write('Input Data Structure and Types:')
-st.write(input_data.info())  # To check the data types of each column
-st.write('\nInput Data Values:')
-st.write(input_data)         # To check the actual values
+    st.write("Input Data:", input_data)
 
-# Make a prediction using the trained model
-try:
-    prediction = lr_model.predict(input_data)
-    st.write(f'Prediction: {prediction[0]}')
-except Exception as e:
-    st.write(f'An error occurred during prediction: {e}')
+    # Check for NaN values in the input data
+    if input_data.isnull().values.any():
+        st.write("Error: Missing values detected in input data.")
+        return
+
+    if st.button("Predict Heart Disease"):
+        try:
+            # Preprocessing and Prediction
+            # Apply the model pipeline, which includes any preprocessing (e.g., scaling, encoding)
+            prediction = lr_model.predict(input_data)
+
+            # Display the prediction result
+            if prediction[0] == 1:
+                st.write('The model predicts that this person has heart disease.')
+            else:
+                st.write('The model predicts that this person does not have heart disease.')
+        except Exception as e:
+            st.write(f"An error occurred during prediction: {e}")
+
+# Ensure the main function is called
+if __name__ == "__main__":
+    main()
