@@ -5,7 +5,7 @@ from joblib import load
 # Caching the model loading process
 @st.cache_resource
 def load_model():
-    return load('heartdisease_logisticregression.joblib')
+    return load('logisticregression2.joblib')
 
 # Load model
 lr_model = load_model()
