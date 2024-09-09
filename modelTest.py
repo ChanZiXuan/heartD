@@ -1,14 +1,11 @@
 import streamlit as st
 import pandas as pd
 from joblib import load
+import joblib
 
-# Caching the model loading process
-@st.cache_resource
-def load_model():
-    return load('heartdisease_logisticregression.joblib')
+# Load the logistic regression model with preprocessing steps included
+lr_model = load('logisticregression2.joblib')
 
-# Load model
-lr_model = load_model()
 
 def main():
     st.title("Heart Disease Prediction")
