@@ -1,39 +1,37 @@
 import pandas as pd
 from joblib import load
-import joblib 
 
-# Load your trained model
-lr_model = load('logisticregression2.joblib')
+# Load the trained logistic regression model (including the pipeline)
+try:
+    lr_model = load('heartdisease_logisticregression.joblib')
+    print("Model loaded successfully.")
+except Exception as e:
+    print(f"Error loading model: {e}")
 
-def main():
-    st.title('Heart Disease Prediction')
-# Define a sample input similar to what you would get from the Streamlit form
+# Define a sample input matching the structure of the training DataFrame
 input_data = pd.DataFrame({
-    'Age': [55],           # Numeric
-    'Sex': [1],            # 1 = Male, 0 = Female (ensure this is numeric)
-    'ChestPainType': [2],  # Encoded as 0, 1, 2, 3 (make sure you use the correct numeric encoding)
-    'RestingBP': [130],    # Numeric
-    'Cholesterol': [250],  # Numeric
-    'FastingBS': [0],      # Binary 0 or 1 (numeric)
-    'RestingECG': [1],     # Encoded as 0, 1, 2
-    'MaxHR': [170],        # Numeric
-    'ExerciseAngina': [1], # 1 = Yes, 0 = No (numeric)
-    'Oldpeak': [1.5],      # Numeric with decimal
-    'ST_Slope': [0]        # Encoded as 0, 1, 2
+    'Age': [55],           # Numeric: Age in years
+    'Sex': [1],            # 1 = Male, 0 = Female (encoded numerically)
+    'ChestPainType': [2],  # Encoded values: TA, ATA, NAP, ASY => 0, 1, 2, 3
+    'RestingBP': [130],    # Numeric: Resting blood pressure
+    'Cholesterol': [250],  # Numeric: Cholesterol level
+    'FastingBS': [0],      # Binary: Fasting blood sugar > 120 mg/dL (1 or 0)
+    'RestingECG': [1],     # Encoded: Normal, ST, LVH => 0, 1, 2
+    'MaxHR': [170],        # Numeric: Maximum heart rate achieved
+    'ExerciseAngina': [1], # 1 = Yes, 0 = No (exercise-induced angina)
+    'Oldpeak': [1.5],      # Numeric: ST depression induced by exercise
+    'ST_Slope': [0]        # Encoded: Up, Flat, Down => 0, 1, 2
 })
 
-# Check the input data
-print("Input Data:")
-print(input_data)
+# Ensure the columns and types are correct
+print("Input Data Structure and Types:")
+print(input_data.info())  # To check the data types of each column
+print("\nInput Data Values:")
+print(input_data)         # To check the actual values
 
-# Attempt prediction using the trained model
+# Make a prediction using the trained model
 try:
     prediction = lr_model.predict(input_data)
-    # Show the result
-    if prediction[0] == 1:
-        st.write('The model predicts that this person has heart disease.')
-    else:
-        st.write('The model predicts that this person does not have heart disease.')
-    print(f"Prediction: {prediction}")
+    print(f"Prediction: {prediction[0]}")
 except Exception as e:
     print(f"An error occurred during prediction: {e}")
