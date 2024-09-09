@@ -6,7 +6,7 @@ try:
     lr_model = load('heartdisease_logisticregression.joblib')
     st.write('Model loaded successfully.')
 except Exception as e:
-    st.write(f"Error loading model: {e}")
+    st.write(f'Error loading model: {e}')
 
 # Define a sample input matching the structure of the training DataFrame
 input_data = pd.DataFrame({
@@ -26,12 +26,12 @@ input_data = pd.DataFrame({
 # Ensure the columns and types are correct
 st.write('Input Data Structure and Types:')
 st.write(input_data.info())  # To check the data types of each column
-st.write("\nInput Data Values:")
+st.write('\nInput Data Values:')
 st.write(input_data)         # To check the actual values
 
 # Make a prediction using the trained model
 try:
     prediction = lr_model.predict(input_data)
-    st.write(f"Prediction: {prediction[0]}")
+    st.write(f'Prediction: {prediction[0]}')
 except Exception as e:
-    st.write(f"An error occurred during prediction: {e}")
+    st.write(f'An error occurred during prediction: {e}')
