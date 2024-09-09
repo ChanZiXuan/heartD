@@ -1,37 +1,68 @@
+import streamlit as st
 import pandas as pd
 from joblib import load
 
-# Load the trained logistic regression model (including the pipeline)
-try:
-    lr_model = load('heartdisease_logisticregression.joblib')
-    print("Model loaded successfully.")
-except Exception as e:
-    print(f"Error loading model: {e}")
+# Caching the model loading process
+@st.cache_resource
+def load_model():
+    return load('heartdisease_logisticregression.joblib')
 
-# Define a sample input matching the structure of the training DataFrame
-input_data = pd.DataFrame({
-    'Age': [55],           # Numeric: Age in years
-    'Sex': [1],            # 1 = Male, 0 = Female (encoded numerically)
-    'ChestPainType': [2],  # Encoded values: TA, ATA, NAP, ASY => 0, 1, 2, 3
-    'RestingBP': [130],    # Numeric: Resting blood pressure
-    'Cholesterol': [250],  # Numeric: Cholesterol level
-    'FastingBS': [0],      # Binary: Fasting blood sugar > 120 mg/dL (1 or 0)
-    'RestingECG': [1],     # Encoded: Normal, ST, LVH => 0, 1, 2
-    'MaxHR': [170],        # Numeric: Maximum heart rate achieved
-    'ExerciseAngina': [1], # 1 = Yes, 0 = No (exercise-induced angina)
-    'Oldpeak': [1.5],      # Numeric: ST depression induced by exercise
-    'ST_Slope': [0]        # Encoded: Up, Flat, Down => 0, 1, 2
-})
+# Load model
+lr_model = load_model()
 
-# Ensure the columns and types are correct
-print("Input Data Structure and Types:")
-print(input_data.info())  # To check the data types of each column
-print("\nInput Data Values:")
-print(input_data)         # To check the actual values
+def main():
+    st.title("Heart Disease Prediction")
 
-# Make a prediction using the trained model
-try:
-    prediction = lr_model.predict(input_data)
-    print(f"Prediction: {prediction[0]}")
-except Exception as e:
-    print(f"An error occurred during prediction: {e}")
+    # Collect user input
+    age = st.number_input("Enter your age:", min_value=0, max_value=120, step=1)
+    sex = st.selectbox("Select your sex:", ("Male", "Female"))
+    chest_pain_type = st.selectbox("Select chest pain type:", ("TA", "ATA", "NAP", "ASY"))
+    resting_bp = st.number_input("Enter resting blood pressure (mm Hg):", min_value=50, max_value=250, step=1)
+    cholesterol = st.number_input("Enter cholesterol (mg/dL):", min_value=100, max_value=600, step=1)
+    fasting_bs = st.selectbox("Fasting blood sugar > 120 mg/dL:", (0, 1))
+    resting_ecg = st.selectbox("Select resting ECG result:", ("Normal", "ST", "LVH"))
+    max_hr = st.number_input("Enter maximum heart rate achieved:", min_value=50, max_value=220, step=1)
+    exercise_angina = st.selectbox("Do you have exercise-induced angina?", ("Yes", "No"))
+    oldpeak = st.number_input("Enter oldpeak (ST depression):", min_value=0.0, max_value=10.0, step=0.1, format="%.1f")
+    st_slope = st.selectbox("Select the slope of the peak exercise ST segment:", ("Up", "Flat", "Down"))
+
+    # Convert categorical inputs to numerical values
+    sex = 1 if sex == "Male" else 0
+    chest_pain_type_mapping = {"TA": 0, "ATA": 1, "NAP": 2, "ASY": 3}
+    chest_pain_type = chest_pain_type_mapping[chest_pain_type]
+    resting_ecg_mapping = {"Normal": 0, "ST": 1, "LVH": 2}
+    resting_ecg = resting_ecg_mapping[resting_ecg]
+    exercise_angina = 1 if exercise_angina == "Yes" else 0
+    st_slope_mapping = {"Up": 0, "Flat": 1, "Down": 2}
+    st_slope = st_slope_mapping[st_slope]
+
+    # Create a DataFrame for the input
+    input_data = pd.DataFrame({
+        'Age': [age],
+        'Sex': [sex],
+        'ChestPainType': [chest_pain_type],
+        'RestingBP': [resting_bp],
+        'Cholesterol': [cholesterol],
+        'FastingBS': [fasting_bs],
+        'RestingECG': [resting_ecg],
+        'MaxHR': [max_hr],
+        'ExerciseAngina': [exercise_angina],
+        'Oldpeak': [oldpeak],
+        'ST_Slope': [st_slope]
+    })
+
+    st.write("Input Data:", input_data)
+
+    if st.button("Predict Heart Disease"):
+        try:
+            prediction = lr_model.predict(input_data)
+            if prediction[0] == 1:
+                st.write('The model predicts that this person has heart disease.')
+            else:
+                st.write('The model predicts that this person does not have heart disease.')
+        except Exception as e:
+            st.write(f"An error occurred during prediction: {e}")
+
+# Ensure the main function is called
+if __name__ == "__main__":
+    main()
