@@ -4,9 +4,9 @@ from joblib import load
 # Load the trained logistic regression model (including the pipeline)
 try:
     lr_model = load('heartdisease_logisticregression.joblib')
-    print("Model loaded successfully.")
+    st.write('Model loaded successfully.')
 except Exception as e:
-    print(f"Error loading model: {e}")
+    st.write(f"Error loading model: {e}")
 
 # Define a sample input matching the structure of the training DataFrame
 input_data = pd.DataFrame({
@@ -24,14 +24,14 @@ input_data = pd.DataFrame({
 })
 
 # Ensure the columns and types are correct
-print("Input Data Structure and Types:")
-print(input_data.info())  # To check the data types of each column
-print("\nInput Data Values:")
-print(input_data)         # To check the actual values
+st.write('Input Data Structure and Types:')
+st.write(input_data.info())  # To check the data types of each column
+st.write("\nInput Data Values:")
+st.write(input_data)         # To check the actual values
 
 # Make a prediction using the trained model
 try:
     prediction = lr_model.predict(input_data)
-    print(f"Prediction: {prediction[0]}")
+    st.write(f"Prediction: {prediction[0]}")
 except Exception as e:
-    print(f"An error occurred during prediction: {e}")
+    st.write(f"An error occurred during prediction: {e}")
