@@ -56,7 +56,7 @@ def main():
     if st.button("Predict Heart Disease"):
         try:
             prediction_proba = lr_model.predict_proba(input_data_scaled)
-            threshold = 0.3  # Lower the threshold to increase sensitivity
+            threshold = 0.4  # Lower the threshold to increase sensitivity
             if prediction_proba[0][1] > threshold:
                 st.write('This person has heart disease.')
             else:
