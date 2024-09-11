@@ -46,7 +46,7 @@ def main():
         'ExerciseAngina': [exercise_angina],
         'Oldpeak': [oldpeak],
         'ST_Slope': [st_slope]
-    }
+    })
                               
 
     # When the user clicks the 'Predict' button, make the prediction
