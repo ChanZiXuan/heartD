@@ -46,17 +46,8 @@ def main():
         'ExerciseAngina': [exercise_angina],
         'Oldpeak': [oldpeak],
         'ST_Slope': [st_slope]
-    })
-
-    # Check for NaN or non-numeric values before converting to float
-    st.write("Checking for NaN or invalid input values:")
-    st.write(input_data.isna())
-    st.write("Data types before conversion:")
-    st.write(input_data.dtypes)
-
-    # Check the input data structure
-    st.write("Input Data (Pandas DataFrame):")
-    st.write(input_data)
+    }
+                              
 
     # When the user clicks the 'Predict' button, make the prediction
     if st.button("Predict Heart Disease"):
@@ -66,9 +57,9 @@ def main():
 
             # Show the result
             if prediction[0] == 1:
-                st.write('The model predicts that this person has heart disease.')
+                st.write('This person has heart disease.')
             else:
-                st.write('The model predicts that this person does not have heart disease.')
+                st.write('This person does not have heart disease.')
         except Exception as e:
             st.write(f'An error occurred during prediction: {e}')
 
