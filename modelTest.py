@@ -3,15 +3,9 @@ import pandas as pd
 from joblib import load
 import numpy as np
 
-# Load the logistic regression model with preprocessing steps included
-try:
-    lr_model = load('newLR.joblib')
-    st.write("Model loaded successfully.")
-except Exception as e:
-    st.write(f"Error loading model: {e}")
-
-    scaler = load('scaler.joblib')
-
+# Load the logistic regression model and the scaler
+lr_model = load('newLR.joblib')
+scaler = load('scaler.joblib')
 
 # Streamlit application starts here
 def main():
@@ -54,15 +48,18 @@ def main():
         'Oldpeak': [oldpeak],
         'ST_Slope': [st_slope]
     })
-                              
+
+    # Scale the input data using the scaler
+    input_data_scaled = scaler.transform(input_data)
 
     # When the user clicks the 'Predict' button, make the prediction
     if st.button("Predict Heart Disease"):
         try:
             # Predict using the model
-            prediction_proba = lr_model.predict_proba(input_data)
-            st.write(f"Prediction probabilities: {prediction_proba}")
-            if prediction_proba[0][1] > 0.5:
+            prediction = lr_model.predict(input_data_scaled)
+
+            # Show the result
+            if prediction[0] == 1:
                 st.write('This person has heart disease.')
             else:
                 st.write('This person does not have heart disease.')
