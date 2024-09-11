@@ -10,6 +10,8 @@ try:
 except Exception as e:
     st.write(f"Error loading model: {e}")
 
+    scaler = load('scaler.joblib')
+
 
 # Streamlit application starts here
 def main():
