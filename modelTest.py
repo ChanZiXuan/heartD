@@ -64,7 +64,6 @@ def main():
             st.write('This person has heart disease.')
         else:
             st.write('This person does not have heart disease.')
-
         except Exception as e:
             st.write(f'An error occurred during prediction: {e}')
 
