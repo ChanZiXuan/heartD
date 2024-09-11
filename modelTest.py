@@ -55,14 +55,12 @@ def main():
     # When the user clicks the 'Predict' button, make the prediction
     if st.button("Predict Heart Disease"):
         try:
-            # Predict using the model
-            prediction = lr_model.predict(input_data_scaled)
-
-            # Show the result
-            if prediction[0] == 1:
-                st.write('This person has heart disease.')
-            else:
-                st.write('This person does not have heart disease.')
+            prediction_proba = lr_model.predict_proba(input_data_scaled)
+            threshold = 0.3  # Lower the threshold to increase sensitivity
+                if prediction_proba[0][1] > threshold:
+                    st.write('This person has heart disease.')
+                else:
+                    st.write('This person does not have heart disease.')
         except Exception as e:
             st.write(f'An error occurred during prediction: {e}')
 
