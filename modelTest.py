@@ -4,7 +4,12 @@ from joblib import load
 import numpy as np
 
 # Load the logistic regression model with preprocessing steps included
-lr_model = load('newLR.joblib')
+try:
+    lr_model = load('newLR.joblib')
+    st.write("Model loaded successfully.")
+except Exception as e:
+    st.write(f"Error loading model: {e}")
+
 
 # Streamlit application starts here
 def main():
