@@ -5,7 +5,6 @@ import numpy as np
 
 # Load the logistic regression model and the scaler
 lr_model = load('newLR.joblib')
-scaler = load('scaler.joblib')
 
 # Streamlit application starts here
 def main():
@@ -49,14 +48,11 @@ def main():
         'ST_Slope': [st_slope]
     })
 
-    # Scale the input data using the scaler
-    input_data_scaled = scaler.transform(input_data)
-
     # When the user clicks the 'Predict' button, make the prediction
     if st.button("Predict Heart Disease"):
         try:
             # Predict using the model
-            prediction = lr_model.predict(input_data_scaled)
+            prediction = lr_model.predict(input_data)
 
             # Show the result
             if prediction[0] == 1:
