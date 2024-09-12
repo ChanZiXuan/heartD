@@ -56,6 +56,7 @@ def main():
         try:
             # Predict using the model
             prediction = lr_model.predict(input_data_scaled)
+            prediction_proba = model.predict_proba(input_data_scaled)
 
             # Show the result
             if prediction[0] == 1:
