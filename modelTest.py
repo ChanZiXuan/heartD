@@ -19,12 +19,12 @@ def main():
     if 'cholesterol' not in st.session_state:
         st.session_state['cholesterol'] = 200  # Default cholesterol
 
-    # Collect user input
-    st.session_state['age'] = st.number_input("Enter your age:", min_value=0, max_value=120, step=1, value=st.session_state['age'])
+   # Collect user input
+    age = st.number_input("Enter your age:", min_value=0, max_value=120, step=1)
     sex = st.selectbox("Select your sex:", ("Male", "Female"))
     chest_pain_type = st.selectbox("Select chest pain type:", ("TA", "ATA", "NAP", "ASY"))
-    st.session_state['resting_bp'] = st.number_input("Enter resting blood pressure (mm Hg):", min_value=50, max_value=250, step=1, value=st.session_state['resting_bp'])
-    st.session_state['cholesterol'] = st.number_input("Enter cholesterol (mg/dL):", min_value=100, max_value=600, step=1, value=st.session_state['cholesterol'])
+    resting_bp = st.number_input("Enter resting blood pressure (mm Hg):", min_value=50, max_value=250, step=1)
+    cholesterol = st.number_input("Enter cholesterol (mg/dL):", min_value=100, max_value=600, step=1)
     fasting_bs = st.selectbox("Fasting blood sugar > 120 mg/dL:", (0, 1))
     resting_ecg = st.selectbox("Select resting ECG result:", ("Normal", "ST", "LVH"))
     max_hr = st.number_input("Enter maximum heart rate achieved:", min_value=50, max_value=220, step=1)
@@ -44,11 +44,11 @@ def main():
 
     # Create a pandas DataFrame from the input data
     input_data = pd.DataFrame({
-        'Age': [st.session_state['age']],
+        'Age': [age],
         'Sex': [sex],
         'ChestPainType': [chest_pain_type],
-        'RestingBP': [st.session_state['resting_bp']],
-        'Cholesterol': [st.session_state['cholesterol']],
+        'RestingBP': [resting_bp],
+        'Cholesterol': [cholesterol],
         'FastingBS': [fasting_bs],
         'RestingECG': [resting_ecg],
         'MaxHR': [max_hr],
@@ -62,20 +62,20 @@ def main():
     st.write(input_data)
 
     # Apply scaling to the input data
-    # try:
-    #     input_data_scaled = scaler.transform(input_data)
-    #     st.write("Scaled Input Data (after applying scaler):")
-    #     st.write(input_data_scaled)
-    # except Exception as e:
-    #     st.write(f'An error occurred during scaling: {e}')
-    #     return
+    try:
+        input_data_scaled = scaler.transform(input_data)
+        st.write("Scaled Input Data (after applying scaler):")
+        st.write(input_data_scaled)
+    except Exception as e:
+        st.write(f'An error occurred during scaling: {e}')
+        return
 
     # When the user clicks the 'Predict' button, make the prediction
     if st.button("Predict Heart Disease"):
         try:
             # Predict using the model
-            prediction = lr_model.predict(input_data)
-            prediction_proba = lr_model.predict_proba(input_data)
+            prediction = lr_model.predict(input_data_scaled)
+            prediction_proba = lr_model.predict_proba(input_data_scaled)
 
             # Show the result
             if prediction[0] == 1:
