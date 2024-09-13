@@ -54,20 +54,20 @@ def main():
     st.write(input_data)
 
     # Apply scaling to the input data
-    try:
-        input_data_scaled = scaler.transform(input_data)
-        st.write("Scaled Input Data (after applying scaler):")
-        st.write(input_data_scaled)
-    except Exception as e:
-        st.write(f'An error occurred during scaling: {e}')
-        return
+    # try:
+    #     input_data_scaled = scaler.transform(input_data)
+    #     st.write("Scaled Input Data (after applying scaler):")
+    #     st.write(input_data_scaled)
+    # except Exception as e:
+    #     st.write(f'An error occurred during scaling: {e}')
+    #     return
 
     # When the user clicks the 'Predict' button, make the prediction
     if st.button("Predict Heart Disease"):
         try:
             # Predict using the model
-            prediction = lr_model.predict(input_data_scaled)
-            prediction_proba = lr_model.predict_proba(input_data_scaled)
+            prediction = lr_model.predict(input_data)
+            prediction_proba = lr_model.predict_proba(input_data)
 
             # Show the result
             if prediction[0] == 1:
