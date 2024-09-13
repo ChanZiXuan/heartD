@@ -10,13 +10,21 @@ scaler = load('scaler.joblib')
 # Streamlit application starts here
 def main():
     st.title('Heart Disease Prediction')
+    
+    # Initialize session state for inputs
+    if 'age' not in st.session_state:
+        st.session_state['age'] = 30  # Set a default value for age
+    if 'resting_bp' not in st.session_state:
+        st.session_state['resting_bp'] = 120  # Default for resting blood pressure
+    if 'cholesterol' not in st.session_state:
+        st.session_state['cholesterol'] = 200  # Default cholesterol
 
     # Collect user input
-    age = st.number_input("Enter your age:", min_value=0, max_value=120, step=1)
+    st.session_state['age'] = st.number_input("Enter your age:", min_value=0, max_value=120, step=1, value=st.session_state['age'])
     sex = st.selectbox("Select your sex:", ("Male", "Female"))
     chest_pain_type = st.selectbox("Select chest pain type:", ("TA", "ATA", "NAP", "ASY"))
-    resting_bp = st.number_input("Enter resting blood pressure (mm Hg):", min_value=50, max_value=250, step=1)
-    cholesterol = st.number_input("Enter cholesterol (mg/dL):", min_value=100, max_value=600, step=1)
+    st.session_state['resting_bp'] = st.number_input("Enter resting blood pressure (mm Hg):", min_value=50, max_value=250, step=1, value=st.session_state['resting_bp'])
+    st.session_state['cholesterol'] = st.number_input("Enter cholesterol (mg/dL):", min_value=100, max_value=600, step=1, value=st.session_state['cholesterol'])
     fasting_bs = st.selectbox("Fasting blood sugar > 120 mg/dL:", (0, 1))
     resting_ecg = st.selectbox("Select resting ECG result:", ("Normal", "ST", "LVH"))
     max_hr = st.number_input("Enter maximum heart rate achieved:", min_value=50, max_value=220, step=1)
@@ -36,11 +44,11 @@ def main():
 
     # Create a pandas DataFrame from the input data
     input_data = pd.DataFrame({
-        'Age': [age],
+        'Age': [st.session_state['age']],
         'Sex': [sex],
         'ChestPainType': [chest_pain_type],
-        'RestingBP': [resting_bp],
-        'Cholesterol': [cholesterol],
+        'RestingBP': [st.session_state['resting_bp']],
+        'Cholesterol': [st.session_state['cholesterol']],
         'FastingBS': [fasting_bs],
         'RestingECG': [resting_ecg],
         'MaxHR': [max_hr],
